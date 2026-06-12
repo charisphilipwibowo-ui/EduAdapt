@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 
 const Login = () => {
-    // State internal murni tanpa mengikat window.location
+    // State internal murni untuk autentikasi mutli-role
     const [role, setRole] = useState('siswa');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -13,7 +13,8 @@ const Login = () => {
         e.preventDefault();
         setError('');
         
-        if (!username || !password) {
+        // Validasi awal sbelum hit ke server
+        if (!username.trim() || !password) {
             setError('Username dan password wajib diisi!');
             return;
         }
@@ -21,34 +22,43 @@ const Login = () => {
         try {
             setLoading(true);
             
-            // Mengirimkan payload murni ke server backend
+            // Mengirimkan payload bersih dengan trim whitespace
             const response = await axios.post('http://localhost:5000/api/auth/login', {
-                username,
-                password,
-                role: role.toLowerCase() // Pastikan selalu huruf kecil murni
+                username: username.trim(),
+                password: password,
+                role: role.toLowerCase() // Menjaga konsistensi huruf kecil murni
             });
 
-            if (response.data.success) {
-                localStorage.setItem('userToken', JSON.stringify(response.data.user));
+            // Sinkronisasi fleksibel dengan respons backend
+            if (response.data && (response.data.success || response.status === 200)) {
+                const userData = response.data.user || response.data;
                 
-                // Redirect instan menggunakan window.location.href ke halaman dashboard masing-masing
-                const targetRole = response.data.user.role.toLowerCase();
+                // Simpan session token user ke lokal storage browser
+                localStorage.setItem('userToken', JSON.stringify(userData));
+                
+                // Ambil role tujuan dari data yang divalidasi server
+                const targetRole = userData.role ? userData.role.toLowerCase() : role.toLowerCase();
+                
+                // Alur routing redirect instan berbasis multi-role aktor
                 if (targetRole === 'guru') {
                     window.location.href = '/dashboard-guru';
                 } else if (targetRole === 'siswa') {
                     window.location.href = '/dashboard-siswa';
-                } else if (targetRole === 'orang_tua' || targetRole === 'orang_tua') {
-                    window.location.href = '/dashboard-ortu';
-                } else if (targetRole === 'kepala_sekolah' || targetRole === 'kepala_sekolah') {
+                } else if (targetRole === 'orang_tua' || targetRole === 'wali') {
+                    window.location.href = '/dashboard-wali';
+                } else if (targetRole === 'kepala_sekolah' || targetRole === 'kepsek') {
                     window.location.href = '/dashboard-kepsek';
+                } else {
+                    setError('Otorisasi role akun ini tidak terdaftar di sistem routing.');
                 }
             }
         } catch (err) {
-            console.error(err);
+            console.error("Detail Error pada konsol frontend:", err);
+            // Penanganan pesan kesalahan dinamis dari server
             if (err.response && err.response.data) {
-                setError(err.response.data.message);
+                setError(err.response.data.message || err.response.data.error || 'Gagal masuk.');
             } else {
-                setError('Gagal masuk. Periksa kembali username, password, dan jenis akun Anda.');
+                setError('Gagal masuk. Koneksi ke server backend terputus (Port 5000 mati).');
             }
         } finally {
             setLoading(false);
@@ -105,7 +115,7 @@ const Login = () => {
             border: 'none',
             borderRadius: '6px',
             cursor: 'pointer',
-            // BIKIN TAB YANG AKTIF JAUH LEBIH JELAS
+            // Kontras warna tab aktif dipertegas penuh untuk mencegah kesalahan klik user
             backgroundColor: active ? '#2563eb' : 'transparent', 
             color: active ? '#ffffff' : '#6b7280',
             boxShadow: active ? '0 2px 4px rgba(37, 99, 235, 0.3)' : 'none',
@@ -157,7 +167,7 @@ const Login = () => {
                     <p style={styles.subtitle}>Masuk ke akun Anda</p>
                 </div>
 
-                {/* TAB SELECTION MURNI MENGUBAH STATE INTERNAL */}
+                {/* Seleksi Tab Navigasi Role Akun */}
                 <div style={styles.tabContainer}>
                     <button
                         type="button"

@@ -20,7 +20,7 @@ const DashboardSiswa = ({ userContext, setUserContext }) => {
         }
     };
 
-    // KONDISI EKSKLUSIF: Render halaman kuis secara penuh jika sedang aktif
+  // KONDISI EKSKLUSIF: Render halaman kuis secara penuh jika sedang aktif
     if (isKuisActive) {
         return (
         <div style={{ padding: '8px', boxSizing: 'border-box' }}>
