@@ -23,7 +23,7 @@ const Sidebar = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1 }}>
             <div style={{ cursor: 'pointer', color: '#1e293b', fontWeight: '600' }} onClick={() => navigate('/dashboard-guru')}>Dashboard</div>
             <div style={{ cursor: 'pointer', color: '#64748b' }} onClick={() => navigate('/materi-guru')}>Katalog Materi</div>
-            <div style={{ cursor: 'pointer', color: '#64748b' }}>Analitik</div>
+            <div style={{ cursor: 'pointer', color: '#64748b' }} onClick={() => navigate('/analitik-guru')}>Analitik</div>
         </div>
 
         {/* Tombol Logout */}

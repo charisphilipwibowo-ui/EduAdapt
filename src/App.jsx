@@ -6,6 +6,10 @@ import DashboardGuru from './components/DashboardGuru';
 import DashboardWali from './components/DashboardWali';
 import DashboardKepsek from './components/DashboardKepsek';
 import KatalogMateriGuru from './components/KatalogMateriGuru';
+import AnalitikSiswa from './components/AnalitikSiswa';
+import AnalitikGuru from './components/AnalitikGuru';
+import AnalitikWali from './components/AnalitikWali';
+import AnalitikKepsek from './components/AnalitikKepsek';
 
 function App() {
     return (
@@ -22,6 +26,12 @@ function App() {
 
             {/* Halaman Katalog Materi untuk Guru */}
             <Route path="/materi-guru" element={<Layout><KatalogMateriGuru /></Layout>} />
+
+            {/* Halaman Analitik untuk semua role */}
+            <Route path="/analitik-siswa" element={<Layout><AnalitikSiswa /></Layout>} />
+            <Route path="/analitik-guru" element={<Layout><AnalitikGuru /></Layout>} />
+            <Route path="/analitik-wali" element={<Layout><AnalitikWali /></Layout>} />
+            <Route path="/analitik-kepsek" element={<Layout><AnalitikKepsek /></Layout>} />
         </Routes>
         </Router>
     );
