@@ -58,7 +58,7 @@ const Login = () => {
             if (err.response && err.response.data) {
                 setError(err.response.data.message || err.response.data.error || 'Gagal masuk.');
             } else {
-                setError('Gagal masuk. Koneksi ke server backend terputus (Port 5000 mati).');
+                setError('Gagal masuk. Koneksi ke server backend terputus.');
             }
         } finally {
             setLoading(false);
@@ -229,12 +229,12 @@ const Login = () => {
                     </div>
 
                     <button type="submit" disabled={loading} style={styles.btnSubmit}>
-                        {loading ? 'Memproses...' : 'Masuk'}
+                        {loading ? 'Sedang memproses...' : 'Masuk'}
                     </button>
                 </form>
 
                 <div style={styles.footer}>
-                    Belum punya akun? <span style={{ color: '#2563eb', cursor: 'pointer', fontWeight: '500' }}>Daftar di sini</span>
+                    Belum punya akun? <a style={{textDecoration: 'none'}} href=""><span style={{ color: '#2563eb', cursor: 'pointer', fontWeight: '500' }}>Daftar di sini</span></a>
                 </div>
             </div>
         </div>
